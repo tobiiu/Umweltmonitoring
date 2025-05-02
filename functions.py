@@ -1,3 +1,5 @@
+"""all the important funktions"""
+
 import pandas, numpy, matplotlib, plotly, seaborn, dash, \
         sklearn, requests
 
