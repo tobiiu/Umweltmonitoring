@@ -26,7 +26,7 @@ def plot_data(data:pandas.DataFrame, column: int|str):
 def correlation_between_columns(data:pandas.DataFrame, columns:list):
     print("show correlation")
 
-
+#####################################################################
 class Data():
     """stores the Date information from 1 Sensebox as a DataFrame
     'add_data()' can add datapoints
@@ -40,7 +40,7 @@ class Data():
 
     def all_data(self) -> pandas.DataFrame:
         return self.data
-        
+######################################################################        
 
 def store_data(new_data):
     """load new data in Data"""
@@ -51,5 +51,5 @@ def all_Data()->pandas.DataFrame:
     return data.data
 
 
-
+# Initialisierung bei Import
 data = Data()
