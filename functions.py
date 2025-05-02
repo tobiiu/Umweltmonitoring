@@ -1,4 +1,4 @@
-"""all the important funktions"""
+"""all the important functions"""
 
 import pandas, numpy, matplotlib, plotly, seaborn, dash, \
         sklearn, requests
