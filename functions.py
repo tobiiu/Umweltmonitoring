@@ -27,10 +27,15 @@ data = Data()
 
 # ==== ETL ====
 # ==== E ====
-def get_sensbox_ip():
+def get_sensbox_ip(nummer=1):
     """The sense_box_i we choice wisely after analysing all sense_boxes"""
     ip = "abcde"
+    sensebox_links={
+        1 : r"https://www.opensensemap.org/explore/67cac102d2a4eb00071d6ac9",
+        2 : None
+    }
     return ip
+    return sensebox_links[ip]
 
 def scrape_sense_box_data(sense_box_ip):
     """get data from the internet (probably as json)"""
