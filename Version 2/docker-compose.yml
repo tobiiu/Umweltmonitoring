@@ -1,30 +1,29 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  db:
+  sensebox-db:
     image: postgres:15
-    container_name: sensebox-db
     environment:
-      POSTGRES_DB: env_monitoring
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5433:5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - version2_sensebox_db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
 
-  app:
-    build: ./app
-    container_name: sensebox-fetcher
+  dash-app:
+    build: ./dash-app
+    ports:
+      - "8050:8050"
     depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: env_monitoring
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      - sensebox-db
+
+  sensebox-fetcher:
+    build: ./fetcher
+    depends_on:
+      - sensebox-db
 
 volumes:
-  db_data:
+  version2_sensebox_db_data:

@@ -2,19 +2,27 @@ import requests
 import json
 import pandas
 from sqlalchemy import create_engine, text
-import os
 import time
 
-sensebox_id = "6252afcfd7e732001bb6b9f7"
-url = f"https://api.opensensemap.org/boxes/{sensebox_id}?format=json"
+import os
 
-def fetch_data():
+db_host = os.getenv("DATABASE_HOST", "localhost")  # <- fallback nur wenn NICHT gesetzt
+db_user = os.getenv("DATABASE_USER", "user")
+db_password = os.getenv("DATABASE_PASSWORD", "pass")
+db_name = os.getenv("DATABASE_NAME", "sensebox")
+
+DATABASE_URL = f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}"
+
+def fetch_and_store():
+    sensebox_id = "6252afcfd7e732001bb6b9f7"
+    url = f"https://api.opensensemap.org/boxes/{sensebox_id}?format=json"
     result = requests.get(url)
-    content = result.json()
+    content = json.loads(result.content)
     sensor = content["sensors"]
-    return pandas.json_normalize(sensor)
+    df = pandas.json_normalize(sensor)
 
-def write_sensor_data(engine, box_id, df):
+    engine = create_engine("postgresql://postgres:postgres@sensebox-db:5432/env_monitoring")
+
     with engine.begin() as conn:
         for _, row in df.iterrows():
             conn.execute(text("""
@@ -28,21 +36,14 @@ def write_sensor_data(engine, box_id, df):
                 ON CONFLICT (timestamp, box_id, sensor_id) DO NOTHING;
             """), {
                 'timestamp': row['lastMeasurement.createdAt'],
-                'box_id': box_id,
+                'box_id': sensebox_id,
                 'sensor_id': row['_id'],
                 'value': row['lastMeasurement.value'],
                 'unit': row['unit'],
                 'sensorType': row['sensorType'],
                 'icon': row['icon']
             })
-
-def main():
-    time.sleep(10)  # gibt der DB etwas Zeit zum Starten
-    df = fetch_data()
-    db_url = f"postgresql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}:{os.environ['DB_PORT']}/{os.environ['DB_NAME']}"
-    engine = create_engine(db_url)
-    write_sensor_data(engine, sensebox_id, df)
-    print("Daten erfolgreich gespeichert.")
+    print("✅ Daten gespeichert")
 
 if __name__ == "__main__":
-    main()
+    fetch_and_store()
