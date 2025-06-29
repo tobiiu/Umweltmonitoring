@@ -18,7 +18,7 @@ from forecast_model import load_and_prepare_data, remove_outliers, prepare_featu
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Adjust CSV_FILE path as it's mounted in a 'data' subfolder
-CSV_FILE = "data/data.csv"
+CSV_FILE = "./data/data.csv"
 SENSEBOX_ID = "60d828c48855dd001cf91983" # Replace with your actual SenseBox ID if different
 MODEL_DIR = "models" # Directory within the container where models are stored
 
@@ -319,7 +319,7 @@ def train_model(n_clicks, sensor_col_name):
         if df_target_sensor.empty or len(df_target_sensor) < 200: # Minimum data for robust training
             return f"⚠️ Nicht genug Datenpunkte für {sensor_col_name} zum Trainieren. Mindestens 200 werden benötigt.", {}
 
-        df_prepared = load_and_prepare_data_from_df(df_target_sensor)
+        df_prepared = load_and_prepare_data(df_target_sensor)
         df_features = prepare_features(df_prepared, sensor_col_name)
 
         # Pass the full DataFrame with original target for correct feature preparation inside the model training
