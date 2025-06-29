@@ -13,7 +13,7 @@ import joblib # Benötigt für das Speichern/Laden von Modellen
 
 # Importiere db_manager und Funktionen aus forecast_model
 import db_manager # db_manager.py muss im PYTHONPATH des Containers sein
-# WICHTIG: Die Funktion in forecast_model.py muss load_and_prepare_data_from_df heißen und einen DataFrame akzeptieren.
+# WICHTIG: Die Funktion in forecast_model.py muss load_and_prepare_data heißen und einen DataFrame akzeptieren.
 from forecast_model import load_and_prepare_data, remove_outliers, prepare_features, train_and_select_model, forecast_steps
 
 # --- Konfiguration ---
