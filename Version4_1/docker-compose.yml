@@ -1,0 +1,62 @@
+version: '3.8'
+
+volumes:
+  timescaledb_data:
+
+services:
+  db:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
+    environment:
+      POSTGRES_USER: user # Ändern Sie dies bei Bedarf
+      POSTGRES_PASSWORD: password # Ändern Sie dies bei Bedarf
+      POSTGRES_DB: env_monitoring
+    ports:
+      - "5434:5432" # Host-Port 5434 auf Container-Port 5432 (PostgreSQL-Standard) abbilden
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data # Persistente Datenbankdaten
+      - ./init-db:/docker-entrypoint-initdb.d # Initialisierungsskripte ausführen (z.B. .sql-Dateien)
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U user -d env_monitoring"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
+  # Dienst zum Sammeln von Daten von der openSenseMap API und Schreiben in die DB
+  data_ingestor:
+    build:
+      context: ./data_ingestor # Gibt den Build-Kontext an (Verzeichnis für Dockerfile)
+      dockerfile: Dockerfile
+    container_name: sensebox_data_ingestor
+    environment:
+      SENSEBOX_ID: "60d828c48855dd001cf91983" # SenseBox ID an sensebox.py übergeben
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: db # Dienstname von docker-compose
+      DB_PORT: 5432 # Interner Port des DB-Containers
+      DB_NAME: env_monitoring
+    depends_on:
+      db: # Der Datensammler benötigt eine gesunde DB-Verbindung
+        condition: service_healthy
+
+  # Dienst für die Dash-Webanwendung
+  app:
+    build:
+      context: ./app # Gibt den Build-Kontext an (Verzeichnis für Dockerfile)
+      dockerfile: Dockerfile
+    container_name: dash_app
+    ports:
+      - "8050:8050" # Host-Port 8050 auf Container-Port 8050 (Dash-Standard) abbilden
+    environment:
+      SENSEBOX_ID: "60d828c48855dd001cf91983" # SenseBox ID an app.py übergeben
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: db # Dienstname von docker-compose
+      DB_PORT: 5432 # Interner Port des DB-Containers
+      DB_NAME: env_monitoring
+    depends_on:
+      db: # Die App benötigt eine gesunde DB-Verbindung
+        condition: service_healthy
+      data_ingestor: # Stellen Sie sicher, dass der Datensammler gestartet ist (für initiale DB-Befüllung)
+        condition: service_started
+
