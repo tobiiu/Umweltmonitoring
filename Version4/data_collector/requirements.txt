@@ -1,0 +1,11 @@
+pandas
+requests
+dash
+dash-bootstrap-components
+plotly
+psycopg2-binary 
+scikit-learn 
+statsmodels 
+holidays 
+joblib 
+matplotlib 
