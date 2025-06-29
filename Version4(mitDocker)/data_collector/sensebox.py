@@ -163,5 +163,5 @@ if __name__ == "__main__":
     # Die Schleife sorgt dafür, dass der Updater regelmäßig läuft.
     while True:
         main()
-        print("Warte 1 Minuten bis zum nächsten Update...")
-        time.sleep(60) # Warte 1 Minuten (60 Sekunden)
+        print("Warte x Minuten bis zum nächsten Update...")
+        time.sleep(120) # Warte 2 Minuten 
