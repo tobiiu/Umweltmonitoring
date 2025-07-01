@@ -452,5 +452,5 @@ def download_data(n_clicks, forecast_data, sensor_col_name):
 
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True)
 
