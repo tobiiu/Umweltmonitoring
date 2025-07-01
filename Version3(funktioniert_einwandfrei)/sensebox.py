@@ -174,7 +174,7 @@ def main():
     else:
         print("Keine neuen Daten zum Anhängen gefunden.")
 
-def run_loop(duration_minutes=5, interval_seconds=10):
+def run_loop(duration_minutes=10, interval_seconds=10):
     start_time = datetime.now(timezone.utc)
     end_time = start_time + timedelta(minutes=duration_minutes)
 
