@@ -79,7 +79,7 @@ app.layout = html.Div(className='container mx-auto p-4 bg-gray-900 text-white', 
                     {"label": "1 Tag", "value": 144},
                     {"label": "3 Tage", "value": 432},
                     {"label": "7 Tage", "value": 1008},
-                    {"label": "21 Tage", "value": 30024}
+                    {"label": "21 Tage", "value": 3024}
                 ],
                 value=144,
                 className='mb-4 bg-gray-800 text-black border-gray-700 rounded'
