@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Dash-App initialisieren mit dunklem Thema
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
-app.title = "Umweltmonitoring Dashboard"
+app.title = "Umweltmonitoring Daashboard"
 
 # Dateipfade
 DATA_FILE = "data.csv"
@@ -68,9 +68,9 @@ app.layout = html.Div(className='container mx-auto p-4 bg-gray-900 text-white', 
                 id="sensor-dropdown",
                 options=[{"label": name, "value": name} for name in SENSORS.keys()],
                 value="Temperature",
-                className='mb-4 bg-gray-800 text-white border-gray-700 rounded'
+                className='mb-4 bg-gray-800 text-black border-gray-700 rounded'
             ),
-            html.Label("Vorhersagehorizont", className='text-lg font-semibold mb-2'),
+            html.Label("Vorhersagehorizont", className='text-white font-semibold mb-2'),
             dcc.Dropdown(
                 id="forecast-horizon",
                 options=[
@@ -78,14 +78,15 @@ app.layout = html.Div(className='container mx-auto p-4 bg-gray-900 text-white', 
                     {"label": "12 Stunden", "value": 72},
                     {"label": "1 Tag", "value": 144},
                     {"label": "3 Tage", "value": 432},
-                    {"label": "7 Tage", "value": 1008}
+                    {"label": "7 Tage", "value": 1008},
+                    {"label": "21 Tage", "value": 30024}
                 ],
                 value=144,
-                className='mb-4 bg-gray-800 text-white border-gray-700 rounded'
+                className='mb-4 bg-gray-800 text-black border-gray-700 rounded'
             ),
-            html.Button("Modell trainieren", id="train-btn", className='bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 w-full'),
-            html.Button("Vorhersage erstellen", id="forecast-btn", className='bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-2 w-full'),
-            html.Button("Daten herunterladen", id="download-btn", className='bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-2 w-full'),
+            html.Button("Modell trainieren", id="train-btn", className='bg-blue-100 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded mb-2 w-full'),
+            html.Button("Vorhersage erstellen", id="forecast-btn", className='bg-green-100 hover:bg-green-700 text-black font-bold py-2 px-4 rounded mb-2 w-full'),
+            html.Button("Daten herunterladen", id="download-btn", className='bg-gray-100 hover:bg-gray-700 text-black font-bold py-2 px-4 rounded mb-2 w-full'),
             dcc.Download(id="download-data"),
             html.Div(id="status-message", className='mt-4 text-lg text-blue-300')
         ]),
