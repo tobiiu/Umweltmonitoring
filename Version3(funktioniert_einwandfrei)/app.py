@@ -250,7 +250,7 @@ def update_dashboard(train_clicks, forecast_clicks, n_intervals, sensor, horizon
                 fillcolor='rgba(16, 185, 129, 0.1)',
                 showlegend=False
             ))
-            status_message = f"✅ Vorhersage für {sensor} erstellt (Std: {std:.2f})."
+            status_message = f"✅ Vorhersage für {sensor} erstellt."
 
         # Gespeicherte Vorhersagen hinzufügen
         for name in figures:
